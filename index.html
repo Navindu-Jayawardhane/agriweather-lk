@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriWeather LK</title>
+  <meta name="description" content="Open-data weather intelligence for agriculture.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-name">AgriWeather <span>LK</span></div>
+        <div class="brand-sub">Open-data agricultural intelligence</div>
+      </div>
+    </div>
+    <div class="status" id="status">● Connecting to weather data</div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">FARM WEATHER INTELLIGENCE</p>
+        <h1>Turn weather data into <span>farming decisions.</span></h1>
+        <p class="hero-copy">Forecasts and agricultural indicators powered by open weather data — no hardware required.</p>
+      </div>
+      <div class="controls">
+        <label for="locationInput">Farm location</label>
+        <div class="search-row">
+          <input id="locationInput" value="Colombo, Sri Lanka" placeholder="e.g. Anuradhapura, Sri Lanka">
+          <button id="searchBtn">Analyze</button>
+        </div>
+        <div class="quick">
+          <button data-place="Anuradhapura, Sri Lanka">Anuradhapura</button>
+          <button data-place="Kandy, Sri Lanka">Kandy</button>
+          <button data-place="Nuwara Eliya, Sri Lanka">Nuwara Eliya</button>
+          <button data-place="Kurunegala, Sri Lanka">Kurunegala</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="location-line">
+      <div>
+        <strong id="placeName">Colombo</strong>
+        <span id="coords">Sri Lanka</span>
+      </div>
+      <div class="updated" id="updated">Loading…</div>
+    </section>
+
+    <section class="metric-grid" id="metrics">
+      <article class="metric"><div class="metric-icon">🌡️</div><div><span>Temperature</span><strong id="temp">—</strong></div></article>
+      <article class="metric"><div class="metric-icon">💧</div><div><span>Humidity</span><strong id="humidity">—</strong></div></article>
+      <article class="metric"><div class="metric-icon">🌧️</div><div><span>Rain probability</span><strong id="rainProb">—</strong></div></article>
+      <article class="metric"><div class="metric-icon">💨</div><div><span>Wind</span><strong id="wind">—</strong></div></article>
+      <article class="metric"><div class="metric-icon">🌱</div><div><span>ET₀ today</span><strong id="eto">—</strong></div></article>
+      <article class="metric"><div class="metric-icon">🌍</div><div><span>Soil moisture</span><strong id="soil">—</strong></div></article>
+    </section>
+
+    <section class="insight-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">AGRICULTURAL ENGINE</p>
+          <h2>Farm insights</h2>
+        </div>
+        <div class="crop-select">
+          <label for="crop">Crop</label>
+          <select id="crop">
+            <option value="general">General</option>
+            <option value="paddy">Paddy</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="tea">Tea</option>
+            <option value="coconut">Coconut</option>
+            <option value="chilli">Chilli</option>
+          </select>
+        </div>
+      </div>
+      <div class="insight-grid" id="insights"></div>
+    </section>
+
+    <section class="forecast-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">FORECAST</p>
+          <h2>7-day outlook</h2>
+        </div>
+        <div class="legend"><span>Rain</span><span>Temperature</span></div>
+      </div>
+      <div class="forecast-cards" id="forecastCards"></div>
+      <div class="chart-wrap"><canvas id="weatherChart"></canvas></div>
+    </section>
+
+    <section class="info-grid">
+      <article class="panel">
+        <p class="eyebrow">DATA</p>
+        <h3>Open weather intelligence</h3>
+        <p>AgriWeather LK uses Open-Meteo weather-model data. The dashboard can be extended later with historical climate data, crop models, satellite observations and machine-learning predictions.</p>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">IMPORTANT</p>
+        <h3>Decision support, not a guarantee</h3>
+        <p>Recommendations in this MVP are rule-based indicators. Local field conditions, soil type, crop variety and official agricultural guidance should be considered before making operational decisions.</p>
+      </article>
+    </section>
+
+    <footer>
+      <span>AgriWeather LK • MVP</span>
+      <span>Weather data: Open-Meteo</span>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
