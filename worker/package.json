@@ -1,0 +1,9 @@
+{
+  "name": "agriweather-alert-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {"check": "node --check risk_alerts.mjs", "run": "node risk_alerts.mjs"},
+  "dependencies": {
+    "firebase-admin": "^13.5.0"
+  }
+}

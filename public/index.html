@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AgriWeather LK</title>
+  <meta name="description" content="Open-data agricultural weather intelligence for Sri Lankan farmers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="logo">A</div><div><b>AgriWeather <em>LK</em></b><small>Open-data agricultural intelligence</small></div></div>
+  <div id="authArea"><button class="ghost" id="logoutBtn" hidden>Sign out</button></div>
+</header>
+
+<main>
+  <section id="authView" class="auth-view">
+    <div class="auth-card">
+      <p class="eyebrow">AGRIWEATHER LK</p>
+      <h1>Weather intelligence for farming.</h1>
+      <p>Manage farms, find weather-aware farming windows, record outputs, and receive risk alerts.</p>
+      <div class="auth-tabs"><button class="tab active" data-auth="login">Sign in</button><button class="tab" data-auth="signup">Create account</button></div>
+      <form id="authForm">
+        <input id="email" type="email" placeholder="Email" required>
+        <input id="password" type="password" placeholder="Password" minlength="6" required>
+        <button class="primary" type="submit" id="authSubmit">Sign in</button>
+      </form>
+      <p id="authMessage" class="small"></p>
+    </div>
+  </section>
+
+  <section id="appView" hidden>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="farm-picker"><label>Active farm</label><select id="farmSelect"></select></div>
+        <nav>
+          <button class="nav active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+          <button class="nav" data-page="advisor">🌱 <span>Farming Advisor</span></button>
+          <button class="nav" data-page="farm">🌾 <span>Farm & Records</span></button>
+          <button class="nav" data-page="alerts">🚨 <span>Alerts</span></button>
+          <button class="nav" data-page="settings">⚙ <span>Settings</span></button>
+        </nav>
+        <div class="side-note">Weather: Open-Meteo<br>Storage: Firebase Firestore</div>
+      </aside>
+
+      <div class="content">
+        <div id="dashboardPage" class="page">
+          <div class="page-head"><div><p class="eyebrow">FARM OVERVIEW</p><h2 id="welcomeTitle">Your farm</h2><p id="farmMeta" class="muted">Select a farm to begin.</p></div><button class="primary" id="refreshWeather">↻ Refresh</button></div>
+          <div class="metrics" id="metrics"></div>
+          <div class="grid2">
+            <section class="panel"><div class="panel-head"><h3>7-day weather</h3><span id="weatherUpdated" class="muted"></span></div><div id="forecast" class="forecast"></div><canvas id="weatherChart" height="120"></canvas></section>
+            <section class="panel"><div class="panel-head"><h3>Today's farm intelligence</h3></div><div id="insights" class="insights"></div></section>
+          </div>
+          <div class="grid3">
+            <section class="panel"><p class="eyebrow">NEXT WINDOW</p><h3 id="nextWindow">—</h3><p id="nextWindowText" class="muted">Use Farming Advisor for a detailed date analysis.</p></section>
+            <section class="panel"><p class="eyebrow">LATEST OUTPUT</p><h3 id="latestYield">—</h3><p id="latestYieldText" class="muted">Record a harvest to build your farm history.</p></section>
+            <section class="panel"><p class="eyebrow">ALERT STATUS</p><h3 id="alertStatus">—</h3><p id="alertStatusText" class="muted">Your notification preferences appear here.</p></section>
+          </div>
+        </div>
+
+        <div id="advisorPage" class="page" hidden>
+          <div class="page-head"><div><p class="eyebrow">FARMING WINDOW ENGINE</p><h2>When should I farm?</h2><p class="muted">Find candidate dates from the next 14 days using forecast conditions and crop requirements.</p></div></div>
+          <section class="panel">
+            <div class="form-grid">
+              <label>Activity<select id="activity"><option value="plant">Planting / transplanting</option><option value="harvest">Harvesting</option><option value="spray">Spraying</option><option value="fertilize">Fertilizing</option></select></label>
+              <label>Crop<select id="advisorCrop"><option value="paddy">Paddy</option><option value="vegetables">Vegetables</option><option value="tea">Tea</option><option value="coconut">Coconut</option><option value="chilli">Chilli</option></select></label>
+              <label>Risk tolerance<select id="riskTolerance"><option value="balanced">Balanced</option><option value="conservative">Conservative</option><option value="flexible">Flexible</option></select></label>
+            </div>
+            <button class="primary" id="runAdvisor">Analyze 14-day window</button>
+          </section>
+          <div id="advisorResults" class="advisor-results"></div>
+        </div>
+
+        <div id="farmPage" class="page" hidden>
+          <div class="page-head"><div><p class="eyebrow">FARM DATA</p><h2>Farm & records</h2><p class="muted">Your records become the foundation for future farm-specific models.</p></div></div>
+          <div class="grid2">
+            <section class="panel"><h3 id="farmFormTitle">Add farm</h3><form id="farmForm" class="stack">
+              <input id="farmName" placeholder="Farm name" required>
+              <div class="form-grid"><input id="farmCrop" placeholder="Crop e.g. Paddy" required><input id="farmArea" type="number" step="0.01" placeholder="Area (acres)" required></div>
+              <input id="farmLocation" placeholder="Location e.g. Anuradhapura, Sri Lanka" required>
+              <div class="form-grid"><input id="farmLat" type="number" step="any" placeholder="Latitude (optional)"><input id="farmLon" type="number" step="any" placeholder="Longitude (optional)"></div>
+              <button class="primary" type="submit">Save farm</button>
+            </form></section>
+            <section class="panel"><h3>Harvest / output</h3><form id="harvestForm" class="stack">
+              <input id="harvestDate" type="date" required><input id="harvestCrop" placeholder="Crop" required>
+              <div class="form-grid"><input id="yieldKg" type="number" step="0.01" placeholder="Yield (kg)" required><input id="price" type="number" step="0.01" placeholder="Selling price / kg"></div>
+              <input id="quality" placeholder="Quality / grade (optional)"><textarea id="harvestNotes" placeholder="Notes"></textarea>
+              <button class="primary" type="submit">Record harvest</button>
+            </form></section>
+          </div>
+          <section class="panel"><div class="panel-head"><h3>Farm activity</h3><button class="ghost" id="addActivityBtn">+ Add event</button></div><div id="records"></div></section>
+        </div>
+
+        <div id="alertsPage" class="page" hidden>
+          <div class="page-head"><div><p class="eyebrow">RISK CENTER</p><h2>Alerts</h2><p class="muted">Review recent automated weather-risk assessments for your active farm.</p></div></div>
+          <div id="alertsList" class="alert-list"></div>
+        </div>
+
+        <div id="settingsPage" class="page" hidden>
+          <div class="page-head"><div><p class="eyebrow">NOTIFICATIONS</p><h2>Alert settings</h2><p class="muted">Choose which risk signals you want to receive.</p></div></div>
+          <section class="panel"><form id="settingsForm" class="settings-form">
+            <div class="checks">
+              <label><input type="checkbox" id="nRain" checked> Heavy rain</label>
+              <label><input type="checkbox" id="nHeat" checked> Heat</label>
+              <label><input type="checkbox" id="nWind" checked> Strong wind</label>
+              <label><input type="checkbox" id="nDisease" checked> Disease-risk conditions</label>
+              <label><input type="checkbox" id="nIrrigation" checked> Irrigation reminders</label>
+            </div>
+            <hr>
+            <label>Telegram chat ID<input id="telegramChatId" placeholder="Optional"></label>
+            <label>WhatsApp number<input id="whatsappNumber" placeholder="Optional, international format"></label>
+            <label>Minimum alert severity<select id="severity"><option value="medium">Medium</option><option value="high">High only</option></select></label>
+            <button class="primary" type="submit">Save notification settings</button>
+            <p class="muted small">Bot/API credentials are never stored here. They belong in the server-side alert worker secrets.</p>
+          </form></section>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
